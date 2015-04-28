@@ -2,6 +2,9 @@
 
 import os, argparse, re
 from test.test_pep277 import filenames
+from local_imports.Classes import aegNPC
+
+from re import split
 
 
 def init():
@@ -74,6 +77,9 @@ def init():
         raise BaseException("Can't use existing output file w/o --force")
     return opts
 
+
+
+
 #Return all *sc files in given directories
 def getSCFileList(sdirs, isdebug):
     aegScriptList=[]    
@@ -86,6 +92,27 @@ def getSCFileList(sdirs, isdebug):
                         print("Added file "+os.path.abspath(os.path.join(root,filename))+" to list.")
     return aegScriptList
 
-#Dummy
+
+#Parse code
 def parsesc (sc):
-    return 1
+    fileopened = open(sc)
+    code = fileopened.readlines()
+    aegNPCs = []
+
+    for line in code:
+        
+        if re.match(r'^npc', line.strip()):
+            splitline= split(r'\ ',line)
+            NPC=aegNPC(splitline)
+            aegNPCs.append(NPC)
+
+      
+        if len(aegNPCs) > 0 :
+            aegNPCs[len(aegNPCs)-1].code.append(line)
+            
+            
+        
+    
+    return aegNPCs
+
+
