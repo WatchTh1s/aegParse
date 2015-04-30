@@ -97,18 +97,25 @@ def getSCFileList(sdirs, isdebug):
 def parsesc (sc):
     fileopened = open(sc)
     code = fileopened.readlines()
+    fileopened.close()
     aegNPCs = []
 
     for line in code:
         
         if re.match(r'^npc', line.strip()):
-            splitline= split(r'\ ',line)
+            splitline = split(r'\"?\"+',line)
+            for arg in split(r'\ ',splitline[splitline.__len__()-1]):
+                splitline.append(arg)
+            for i in [0,1,2,2]:
+                del splitline[i]
+            
+            
+            
             NPC=aegNPC(splitline)
             aegNPCs.append(NPC)
-
       
         if len(aegNPCs) > 0 :
-            aegNPCs[len(aegNPCs)-1].code.append(line)
+            aegNPCs[len(aegNPCs)-1].addCodeLine(line.strip())
             
             
         
@@ -116,3 +123,7 @@ def parsesc (sc):
     return aegNPCs
 
 
+def WriteVoc(result,dfile):
+        fileopened = open(dfile,'a')
+        for line in result:
+            fileopened.write(str(line)+"\n")
