@@ -6,6 +6,13 @@ import re
 #Additional idents   
 
 reserved = {
+            
+   'broadcastinmap' : 'BCAST',
+   'enablenpc'      : 'ENNPC',
+   'disablenpc'     : 'DISNPC',
+   'cmdothernpc'    : 'CMDNPC',
+   'InitTimer'      : 'TINIT',
+   'callmonster'    : 'CALLMOB',
    'if'             : 'IF',
    'else'           : 'ELSE',
    'elseif'         : 'ELSEIF',
@@ -23,9 +30,10 @@ reserved = {
    'checkpoint'     : 'CHECKPOINT',
    'getitem'        : 'GETITEM',
    'jobchange'      : 'JOBCHANGE',
+   'npc'            : 'NPC',
 }
 
-literals = "+-*[]()"+['/{1}']
+literals = "%+-*[](){}"
  
 tokens = [
 
@@ -33,20 +41,18 @@ tokens = [
 "AEG_COMMENT",
 #Basic
 "AEG_NPC",
+"AEG_COLOR",
 #Define vartypes
 "AEG_INT",
 "AEG_STR",
-"AEG_BOOL",
+"AEG_BMP",
 #Define operators
-#"AEG_SEMICOLON",
+"AEG_SEMICOLON",
+"AEG_DIVISION",
 "AEG_COMMA",
 "AEG_SETVAL",
 "AEG_COMPARES",
 "AEG_BOOLOPS",
-"AEG_GLOBALVARS",
-"AEG_NPCEVENT",
-
-#"AEG_NPCBMP",
 #Everything else
 "AEG_IDENT"
 ] + list(reserved.values())
@@ -55,30 +61,30 @@ tokens = [
 #This is all GLOBAL tokens tha CAN be used
 
 
-t_ignore = '\ \t\f'
+t_ignore = ' \t\f'
 t_AEG_NPC = r'npc'
-t_AEG_NPCEVENT = 'On[a-zA-Z]*?:'
-t_AEG_GLOBALVARS = 'v\[[0-9a-zA-Z_]+?\]'
+t_AEG_DIVISION = r'\/\s'
 #Commentaries
 def t_AEG_COMMENT(t):
-    r'\/\/\.+'
+    r'\/\/.*\n|\/\/|\/\/.*\r'
     pass
 #Define vartypes
 def t_AEG_INT(t):
-    r'\d+'
+    r'\d+[\s\,\/]'
     t.value = int(t.value)
     return t
-t_AEG_STR = r'"(\\.|[^"])*"'
-#t_AEG_NPCBMP = r'[0-9]{1}[0-9A-Z_]*'
+t_AEG_STR = r'"([^"])*"'
+t_AEG_BMP = r'[0-9]{1}_[a-zA-Z0-9_]*'
 #Define operators
 t_AEG_SETVAL = r'\='
-#t_AEG_SEMICOLON = r':'
+t_AEG_COLOR = 'r\^[0-9A-F]{6}'
+t_AEG_SEMICOLON = r':'
 t_AEG_COMMA = r'\,'
 t_AEG_COMPARES = r'\>|\<|>=\<=|==|<>|!='
 t_AEG_BOOLOPS = r'\||&&|&'
 
 def t_AEG_IDENT(t):
-    r'[a-zA-Z_0-9_]\w*'
+    r'[a-zA-Z0-9_\']\w*'
     t.type = reserved.get(t.value,'AEG_IDENT')    # Check for reserved words
     return t
 

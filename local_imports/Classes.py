@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-
 from re import match
-
-
 class aegNPC():
     
     code = []
@@ -21,27 +18,19 @@ class aegNPC():
             self.touchx     = initline[6]
         if len(initline)>=8:
             self.touchy     = initline[7]
-   
+    
+    #For debug purposes. We a trying to get everything NPC has as codelines   
     def addCodeLine (self, line):
         if not match(r'^npc', line):
-            self.code.append(line)
+            self.code.append(line)    # Dummy method
     
-    # Dummy method
+    #Dummy method
     def Compare(self,aegNPC):
         
         result = True
         
         return result
     
-    #Dummy method
-    #------------------------------------------------------- def codeTree(self):
-        #------------------------------------------------ for line in self.code:
-            #--------------------------------------- if match(r'^On.*\:$',line):
-                #--------------------------------------------- state = "isEvent"
-                #--------------------------------------------------- self.Code()
-#------------------------------------------------------------------------------ 
-        #-------------------------------------------------------------- return 1
-
 class Code (aegNPC):
     Events = []
     
