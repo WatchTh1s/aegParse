@@ -113,7 +113,7 @@ def getSCFileList(sdirs, isdebug, uselist):
         return aegScriptList
 
 #Parse code
-def parsesc (sc, isdebug):
+def parsesc (sc, isdebug, forceout):
     #if re.match(r'^.*job_knight$', sc):
     fileopened = open(sc)
     code = fileopened.read()
@@ -139,14 +139,22 @@ def parsesc (sc, isdebug):
         #Write lexems into file
         lexfilename = os.path.abspath(sc)+".lex"
         try:
-            Writef(result, lexfilename)
+            Writef(result, lexfilename, forceout)
         except:
             raise
     
     return result
 
-def Writef(result,dfile):
-        fileopened = open(dfile,'a')
+def Writef(result, dfile, forceout):
+        if forceout and os.path.exists(dfile):
+            try:
+                os.remove(dfile)
+            except:
+                raise BaseException("Can't remove existing lexical file.")
+        try:
+            fileopened = open(dfile,'a')
+        except:
+            raise BaseException("Can't create lexical file.")
         
         for line in result:
             fileopened.write(str(line)+"\n")

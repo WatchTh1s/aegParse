@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import ply.lex as lex
 import re
+#States
 
+state = {
+         ("division","exclusive"),
+         
+         }
 
 #Additional idents   
 
@@ -18,7 +23,8 @@ reserved = {
    'elseif'         : 'ELSEIF',
    'endif'          : 'endIF',
    'while'          : 'WHILE',
-   'choose menu'    : 'CH_MENU_START',
+   'choose'         : 'CH_MENU_START',
+   'menu'           : 'CH_MENU_CONT',
    'endchoose'      : 'CH_MENU_END',
    'break'          : 'BREAK',
    'return'         : 'RETURN',
@@ -41,55 +47,61 @@ tokens = [
 "AEG_COMMENT",
 #Basic
 "AEG_NPC",
+"AEG_EVENT",
 "AEG_COLOR",
 #Define vartypes
 "AEG_INT",
 "AEG_STR",
 "AEG_BMP",
 #Define operators
-"AEG_SEMICOLON",
 "AEG_DIVISION",
 "AEG_COMMA",
 "AEG_SETVAL",
-"AEG_COMPARES",
+"AEG_COMPARE",
 "AEG_BOOLOPS",
 #Everything else
-"AEG_IDENT"
-] + list(reserved.values())
+] + list(reserved.values()) + ["AEG_IDENT"]
 
 #Lex tokens definitions
-#This is all GLOBAL tokens tha CAN be used
-
-
 t_ignore = ' \t\f'
 t_AEG_NPC = r'npc'
-t_AEG_DIVISION = r'\/\s'
-#Commentaries
+#------------------------------------------------------ def t_begin_division(t):
+    #--------------------------------------------------------------------- r'\/'
 def t_AEG_COMMENT(t):
-    r'\/\/.*\n|\/\/|\/\/.*\r'
-    pass
-#Define vartypes
-def t_AEG_INT(t):
-    r'\d+[\s\,\/]'
-    t.value = int(t.value)
+        r'/{2}.*?[\n\r]+?|/\*.*\*/'
+        pass
+
+def t_AEG_DIVISION(t):
+    r'/'
+#   t.value = int(t.value)
     return t
+#Commentaries
+#Define vartypes
+
 t_AEG_STR = r'"([^"])*"'
 t_AEG_BMP = r'[0-9]{1}_[a-zA-Z0-9_]*'
 #Define operators
 t_AEG_SETVAL = r'\='
 t_AEG_COLOR = 'r\^[0-9A-F]{6}'
-t_AEG_SEMICOLON = r':'
+
 t_AEG_COMMA = r'\,'
-t_AEG_COMPARES = r'\>|\<|>=\<=|==|<>|!='
+t_AEG_COMPARE = r'\>|\<|>=\<=|==|<>|!='
 t_AEG_BOOLOPS = r'\||&&|&'
 
 def t_AEG_IDENT(t):
-    r'[a-zA-Z0-9_\']\w*'
+    r'On[a-zA-Z0-9]*\:|[a-zA-Z][a-z0-9A-Z\_\.\']*|[0-9]+_[a-z0-9A-Z_\'\_]*|[a-zA-Z]'
     t.type = reserved.get(t.value,'AEG_IDENT')    # Check for reserved words
+    if re.match('On[a-zA-Z0-9]*\:', t.value):
+        t.type = 'AEG_EVENT'
+    return t
+
+def t_AEG_INT(t):
+    r'\d+'
+    t.value = int(t.value)
     return t
 
 def t_newline(t):
-    r'[\n\r]+'
+    r'[\n\r]+|\r\n'
     t.lexer.lineno += len(t.value)
 
 

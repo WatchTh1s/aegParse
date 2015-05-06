@@ -4,12 +4,13 @@ from local_imports.methods import init
 from local_imports.methods import getSCFileList
 from local_imports.methods import parsesc
 import os
+import re
 
 def main ( ):
         
 
     opts = init()
-    os.chdir(".\lex")
+    # os.chdir(".\lex")
    
     SCFileList=getSCFileList(opts.sdir, opts.isdebug, opts.uselist)    
     
@@ -18,7 +19,7 @@ def main ( ):
         #Generate a list of objects for every NPC in current file
         print ("Parsing file "+sc)
         #Generating lexical file
-        lex=parsesc(os.path.abspath(sc), opts.isdebug)
+        lex=parsesc(os.path.abspath(sc), opts.isdebug, opts.forceout)
          
         
         
