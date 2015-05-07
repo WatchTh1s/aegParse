@@ -2,11 +2,12 @@
 
 import os, argparse, re
 from local_imports.Classes import aegNPC
-from local_imports.aegLex import Process
 from re import split
+from local_imports.aegYacc import aegParser
 
 
-def init():
+
+def initopts():
 #Initialization of options    
     optParser = argparse.ArgumentParser(description='Aegis vocabulary generator')
 
@@ -113,27 +114,19 @@ def getSCFileList(sdirs, isdebug, uselist):
         return aegScriptList
 
 #Parse code
-def parsesc (sc, isdebug, forceout):
-    #if re.match(r'^.*job_knight$', sc):
-    fileopened = open(sc)
-    code = fileopened.read()
-    fileopened.close()
-    #-------------------------------------------------------------- aegNPCs = []
+def parsesc (sc, 
+             isdebug, 
+             forceout, 
+             aegparser
+             ):
     
-#Returning all npcs found in file dunno what for. For dZebug maybe
-    #--------------------------------------------------------- for line in code:
-#------------------------------------------------------------------------------ 
-        #----------------------------------- if re.match(r'^npc', line.strip()):
-            #--------------------------------- splitline = split(r'\"?\"+',line)
-            #--------- for arg in split(r'\ ',splitline[splitline.__len__()-1]):
-                #----------------------------------------- splitline.append(arg)
-            #----------------------------------------------- for i in [0,1,2,2]:
-                #---------------------------------------------- del splitline[i]
-            #--------------------------------------------- NPC=aegNPC(splitline)
-            #----------------------------------------------- aegNPCs.append(NPC)
-#------------------------------------------------------------------------------ 
-    #------------------------------------------------------------ return aegNPCs
-    result=Process(code)
+    fileopened = open(sc)
+    data = fileopened.read()
+    fileopened.close()
+
+    #Following line is for lexer teseting only
+    #result=aeglexer.Process(code)
+    result=aegParser.parse(data)
 
     if isdebug:
         #Write lexems into file
