@@ -35,7 +35,7 @@ class aegLex(object):
        'npc'            : 'NPC',
     }
     
-    literals = "%+-*[](){}"
+    literals = ['%','+','-','*','[',']','(',')','{','}']
      
     tokens = [
     

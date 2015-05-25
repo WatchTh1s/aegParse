@@ -16,23 +16,26 @@ def main ( ):
     SCFileList=getSCFileList(opts.sdir, opts.isdebug, opts.uselist)    
 
     #Init lexical parser    
-    #aeglexer = aegLex()
+    aeglexer = aegLex()
     #aeglexer.build()
     
     #Init parser
-    aegparser = aegParser()
+    #aegparser = aegParser()
     
     for sc in SCFileList:
         #Generate a list of objects for every NPC in current file
         print ("Parsing file "+sc)
         #Generating lexical file
-        lex=parsesc(os.path.abspath(sc), opts.isdebug, opts.forceout
-                    , aegparser
+        parsesc(os.path.abspath(sc), opts.isdebug, opts.forceout
+                    , aeglexer
                     )
          
         
         
     
+    print (str(SCFileList.__len__()) + "  files lexic parsed")
+    
+    #Here is token by token comparsion of .lex-files
     
 
 

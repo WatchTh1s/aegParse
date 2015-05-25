@@ -100,7 +100,7 @@ def getSCFileList(sdirs, isdebug, uselist):
                         aegScriptList.append(os.path.abspath(os.path.join(root,filename)))
                         if isdebug:
                             print("Added file "+os.path.abspath(os.path.join(root,filename))+" to list.")
-        return aegScriptList
+        
     else:
 
         listpath=(os.path.join(sdirs,"list.txt"))
@@ -111,22 +111,25 @@ def getSCFileList(sdirs, isdebug, uselist):
             if not re.match(r'^;.*|\s', string):
                 car = os.path.join(sdirs,"..",string)
                 aegScriptList.append(car.strip())
-        return aegScriptList
+        
+    print (str(aegScriptList.__len__()) + " files found.")
+    return aegScriptList
 
 #Parse code
 def parsesc (sc, 
              isdebug, 
              forceout, 
-             aegparser
+             aeglexer,
+             #aegparser
              ):
     
-    fileopened = open(sc)
-    data = fileopened.read()
-    fileopened.close()
+    #fileopened = open(sc)
+    data = open(sc).read()
+    
 
     #Following line is for lexer teseting only
-    #result=aeglexer.Process(code)
-    result=aegParser.parse(data)
+    result=aeglexer.Process(data)
+    #result=aegParser.parse(data)
 
     if isdebug:
         #Write lexems into file

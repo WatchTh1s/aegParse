@@ -20,6 +20,26 @@ class aegParser:
         print (p)
         print
 
-    def p_rule_0(self,p):
-        """symbol1 : symbol2"""
+    def p_rule_npc(self,p):
+        #""" : """
+        'npc : AEG_NPC AEG_STR AEG_STR AEG_NPCBMP AEG_INT AEG_INT AEG_INT AEG_INT AEG_INT'
         p[0] = p[1]
+        
+    def p_rule_string(self,p):
+        #""" : """
+        '''string : string '+' AEG_IDENT 
+                | AEG_IDENT + string
+                | AEG_STR'''
+        
+        p[0] = p[1]
+    
+    def p_rule_dialog(self,p):
+        #""" : """
+        '''dialog : DIALOG string 
+                | DIALOG AEG_STR'''
+        
+        p[0] = p[1]
+        
+    def p_statement_assign(self,p):
+        'statement : NAME "=" expression'
+#        names[p[1]] = p[3]
